@@ -1,0 +1,7 @@
+﻿li.bookLink {
+    cursor: pointer;
+}
+
+li.bookLink:hover {
+    text-decoration: underline;
+}
