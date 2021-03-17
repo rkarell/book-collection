@@ -32,6 +32,7 @@ function fillBookData(book) {
     $("#title").val(book.title);
     $("#author").val(book.author);
     $("#description").val(book.description);
+    enableButtons();
 }
 
 function getFormData() {
@@ -46,10 +47,7 @@ function newBook(bookData) {
         data: JSON.stringify(bookData),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        success: function (data) { updateBooks(); },
-        error: function (errMsg) {
-            alert(errMsg);
-        }
+        success: function (data) { updateBooks(); }
     });
 }
 
@@ -60,10 +58,7 @@ function editBook(bookData) {
         data: JSON.stringify(bookData),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        success: function (data) { updateBooks();},
-        error: function (errMsg) {
-            alert(errMsg);
-        }
+        success: function (data) { updateBooks();}
     });
 }
 
@@ -71,29 +66,46 @@ function deleteBook(bookData) {
     $.ajax({
         type: "DELETE",
         url: "http://localhost:8080/books/" + bookData.id,
-        success: function (data) { updateBooks();},
-        error: function (errMsg) {
-            alert(errMsg);
-        }
+        success: function (data) { updateBooks();}
     });
+}
+
+function disableButtons() {
+    document.getElementById("save").disabled = true;
+    document.getElementById("delete").disabled = true;
+}
+
+function enableButtons() {
+    document.getElementById("save").disabled = false;
+    document.getElementById("delete").disabled = false;
 }
 
 $(document).ready(function () {
     updateBooks();
 
     $("#saveNew").click(function () {
-        var bookData = getFormData();
-        delete bookData.id;
-        newBook(bookData);
+        var isValid = document.getElementById("mainForm").reportValidity();
+        if (isValid) {
+            var bookData = getFormData();
+            delete bookData.id;             // When posting a new book, id must not be sent (as the book can't have it yet)
+            newBook(bookData);
+        }
     });
 
     $("#save").click(function () {
-        var bookData = getFormData();
-        editBook(bookData);
+        var isValid = document.getElementById("mainForm").reportValidity();
+        if (isValid) {
+            var bookData = getFormData();
+            editBook(bookData);
+        }
     });
 
     $("#delete").click(function () {
         var bookData = getFormData();
         deleteBook(bookData);
+    });
+
+    $("#mainForm").on("reset", function () {
+        disableButtons();
     });
 });
