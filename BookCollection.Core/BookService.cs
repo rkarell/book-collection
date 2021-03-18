@@ -65,7 +65,7 @@ namespace BookCollection.Core
 
         private bool BookExists(int id)
         {
-            return _context.Books.Any(mw => mw.Id == id);
+            return _context.Books.Any(book => book.Id == id);
         }
     }
 }

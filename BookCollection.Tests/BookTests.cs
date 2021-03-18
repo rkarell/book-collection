@@ -1,3 +1,5 @@
+// Tests may fail if run with data other than that created by DbInitializer
+
 using System.Linq;
 using Xunit;
 using Microsoft.EntityFrameworkCore;
